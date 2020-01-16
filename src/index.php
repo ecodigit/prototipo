@@ -11,11 +11,11 @@
         valorizzazione dei beni e delle attività culturali della regione Lazio</title>
 
 <!-- Bootstrap core CSS -->
-<link href="/prototipo//vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
 
 <!-- Custom styles for this template -->
-<link href="/prototipo//css/style1.css" rel="stylesheet">
+<link href="css/style1.css" rel="stylesheet">
 
 <link rel="stylesheet"
         href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
@@ -25,7 +25,7 @@
 </head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script>
-function f1(objButton){  
+function f1(objButton){
     $("#advsearch").show();
 }
 </script>
@@ -35,9 +35,9 @@ function f1(objButton){
                 id="mainNav">
                 <div class="container">
                         <a class="navbar-brand js-scroll-trigger" href="https://dtclazio.it"><img
-                                class="logo-nav" src="/prototipo/logo_dtc.png"></a> <a
+                                class="logo-nav" src="logo_dtc.png"></a> <a
                                 class="navbar-brand js-scroll-trigger" href="#page-top"><img
-                                class="logo-nav" src="/prototipo/semplice-1.png"></a>
+                                class="logo-nav" src="semplice-1.png"></a>
                         <button class="navbar-toggler bg-navbar-toggler" type="button"
                                 data-toggle="collapse" data-target="#navbarResponsive"
                                 aria-controls="navbarResponsive" aria-expanded="false"
@@ -69,12 +69,12 @@ function f1(objButton){
         </nav>
        <header class="text-white">
                 <div class="container text-center">
-                        <object type="image/svg+xml" data="/prototipo/esteso.svg"> Your
+                        <object type="image/svg+xml" data="esteso.svg"> Your
                                 browser does not support SVG </object>
 
 			 <div class="col-lg-10 mx-auto row-title">
                              <p class="section-title">
-				<form action="/prototipo/search_sparql.php" method="GET">
+				<form action="search_sparql.php" method="GET">
 
 					<input id="search" name="search" type="text" placeholder="Type here">
 					<input id="submit" type="submit" value="Search">
@@ -94,7 +94,7 @@ function f1(objButton){
 				 <option value="Scienze_matematiche_e_informatiche">Scienze matematiche e informatiche</option>
 				 <option value="Scienze_della_terra">Scienze della terra</option>
 				 <option value="Scienze_chimiche">Scienze chimiche</option>
-			</select>	
+			</select>
 			<br>
 			<br>
 			<p>
@@ -136,7 +136,7 @@ function f1(objButton){
 				<option value="FONDAMENTI_CHIMICI_DELLE_TECNOLOGIE">FONDAMENTI CHIMICI DELLE TECNOLOGIE</option>
 				<option value="RESTAURO">,RESTAURO</option>
 				<option value="ETRUSCOLOGIA_E_ANTICHIT%C3%80_ITALICHE">ETRUSCOLOGIA E ANTICHITA' ITALICHE</option>
-			</select>	
+			</select>
 			<br>
 			<br>
 			<p>
@@ -181,7 +181,7 @@ function f1(objButton){
 				<option value="BOTANICA_SISTEMATICA">BOTANICA SISTEMATICA</option>
 				<option value="PREISTORIA_E_PROTOSTORIA">PREISTORIA E PROTOSTORIA</option>
 				<option value="FISICA_SPERIMENTALE">FISICA SPERIMENTALE</option>
-			</select>	
+			</select>
 			<br>
 			<br>
 			<p>
@@ -217,7 +217,7 @@ function f1(objButton){
 				<option value="Cartografia_storica_e_HGIS">Cartografia storica e HGIS</option>
 				<option value="Archeologia">Archeologia</option>
 
-			</select>	
+			</select>
 			<br>
 			<br>
 			<p>
@@ -250,7 +250,7 @@ function f1(objButton){
 				<option value="mappatura_ex_ante_e_ex_post">mappatura ex ante e ex post</option>
 				<option value="Blogs">Blogs</option>
 				<option value="quadri_programmatici">quadri programmatici</option>
-			</select>	
+			</select>
 			<br>
 			<br>
                          </div>
@@ -263,4 +263,3 @@ function f1(objButton){
         </header>
 </body>
 </html>`
-
