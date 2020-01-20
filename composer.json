@@ -1,0 +1,28 @@
+{
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "openlayers/openlayers",
+                "version": "5.2.0",
+                "dist": {
+                    "url": "https://github.com/openlayers/openlayers/releases/download/v5.2.0/v5.2.0-dist.zip",
+                    "type": "zip"
+                },
+                "source": {
+                    "url": "https://github.com/openlayers/openlayers.git",
+                    "type": "git",
+                    "reference": "tags/v5.2.0"
+                }
+            }
+        }
+    ],
+    "require": {
+        "easyrdf/easyrdf": "0.9.*",
+        "twbs/bootstrap": "4.3.*",
+        "openlayers/openlayers": "5.2.0"
+    },
+    "require-dev": {
+        "phing/phing": "2.16.*"
+    }
+}
