@@ -24,5 +24,8 @@
     },
     "require-dev": {
         "phing/phing": "2.16.*"
+    },
+    "autoload": {
+        "psr-4": {"Local\\": "src/"}
     }
 }
