@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="prototipo" default="build">
+
+    <!-- ============================================  -->
+    <!-- (DEFAULT) Target: build                       -->
+    <!-- ============================================  -->
+    <target name="build">
+
+        <echo msg="Copying files to ./dist directory..." />
+
+        <echo msg="Copying ./public_html..." />
+        <copy todir="./dist/public_html">
+            <fileset dir="./public_html"></fileset>
+        </copy>
+
+        <echo msg="Copying bootstrap files..." />
+        <copy todir="./dist/public_html/css">
+            <fileset dir="./vendor/twbs/bootstrap/dist/css"></fileset>
+        </copy>
+        <copy todir="./dist/public_html/js">
+            <fileset dir="./vendor/twbs/bootstrap/dist/js"></fileset>
+        </copy>
+
+        <echo msg="Copying onpenlayers files..." />
+        <copy todir="./dist/public_html/css">
+          <fileset dir="./vendor/openlayers/openlayers">
+            <include name="ol.css" />
+            <include name="ol.css.map" />
+          </fileset>
+        </copy>
+        <copy todir="./dist/public_html/js">
+          <fileset dir="./vendor/openlayers/openlayers">
+            <include name="ol.js" />
+            <include name="ol.js.map" />
+          </fileset>
+        </copy>
+
+        <echo msg="Copying ./vendor..." />
+        <copy todir="./dist/vendor">
+            <fileset dir="./vendor"></fileset>
+        </copy>
+
+        <echo msg="Copying ./src..." />
+        <copy todir="./dist/src">
+            <fileset dir="./src"></fileset>
+        </copy>
+
+    </target>
+
+</project>
