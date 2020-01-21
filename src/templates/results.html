@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="it">
+    <head>
+        {{ include('header.html') }}
+        <title> Results </title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    </head>
+    <body>
+
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="p-3">
+                        <form>
+                            <div class="form-group">
+                            <!-- <label for="textSearch">Free text search</label> -->
+                                <div class="input-group">
+
+                                    <input
+                                      type="text" class="form-control" id="textSearch"
+                                      aria-describedby="button-search" value="{{searchString}}">
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-primary" type="button" id="button-search">search</button>
+                                    </div>
+                                </div>
+                            <!-- <button type="submit" class="btn btn-primary">Search</button> -->
+                            </div>
+                            <div id="advancedSearch">
+                            </div>
+                        </form>
+                    </div>
+                <!-- </div> -->
+                </div>
+            </div>
+            <div class="row" style="border-top: 1px solid rgba(0,0,0,.1);">
+                <div class="col">
+                    {% for resultType in results|keys %}
+                    <!-- <div class="row">
+                    <div class="col"> -->
+                    <div class="card mt-3 mb-3">
+                        <div class="card-header" style="padding: .5rem 1rem;">
+                            {{ typeLabels[resultType] }}
+                        </div>
+                        <div class="card-body" style="padding: .5rem 1rem;">
+                        <!-- <div> -->
+                        <!-- <h6 class="card-title">{{group.label}}</h6> -->
+                        <!-- <ul class="list-unstyled" style="margin-bottom: 0;"> -->
+                        <!-- <ul class="list-unstyled"> -->
+                        <ul>
+                            {% for item in results[resultType] %}
+                            <li>
+                                <a href="{{item.uriOggetto}}">{{item.titolo}}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        <!-- </div> -->
+                        </div>
+                    </div>
+                    <!-- </div>
+                    </div> -->
+                    {% endfor %}
+                    </div>
+                    <div class="col">
+                    <a href="./showr_on_map.php">Show record on maps</a>
+                </div>
+            </div>
+        </div>
+        {{ include('footer.html') }}
+    </body>
+</html>

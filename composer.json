@@ -20,7 +20,8 @@
     "require": {
         "easyrdf/easyrdf": "0.9.*",
         "twbs/bootstrap": "4.3.*",
-        "openlayers/openlayers": "5.2.0"
+        "openlayers/openlayers": "5.2.0",
+        "twig/twig": "^3.0"
     },
     "require-dev": {
         "phing/phing": "2.16.*"

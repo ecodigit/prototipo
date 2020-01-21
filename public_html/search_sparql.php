@@ -11,26 +11,8 @@
      */
 
     require __DIR__ . '/../vendor/autoload.php';
-    // set_include_path(get_include_path() . PATH_SEPARATOR . './lib/');
-    require_once __DIR__ . '/../src/html_tag_helpers.php';
 
-    // $dlClient = new Local\DL_Client();
-    require_once __DIR__ . '/../src/DL_Client.php';
-    $dl_client = new DL_Client();
-
-?>
-<!DOCTYPE html>
-<html>
-<head>
-  <title> Results </title>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-
-</head>
-<body>
-<h1> Results </h1>
-
-<ul>
-<?php
+    $dl_client = new \Local\DL_Client();
 
 //  Getting options from search form
 
@@ -41,38 +23,46 @@
     $Tematiche= $_GET['Tematiche'];
     $Tipologie= $_GET['Tipologie'];
 
+    $TYPE_LABEL_MAP = [
+        "object" => "Prodotti",
+        "project" => "Progetti",
+        "person" => "Persone",
+        "organization" => "Organizzazioni"
+    ];
+
 // DEBUG
     //print_r( $AreeDisc);
 
-    echo "<h2>List of results : ".$string_s."</h2>";
-
-    $result = $dl_client->query(
-        $string_s, $AreeDisc, $Discipline,$Settori, $Tematiche, $Tipologie);
+    $result = $dl_client->queryEachType(
+        $string_s, $AreeDisc, $Discipline,$Settori, $Tematiche, $Tipologie, 5);
 
 // Create array of results
     $s_result = array();
     $ind = 0;
 
+    $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../src/templates');
+    $twig = new \Twig\Environment($loader);
+
+    echo $twig->render('results.html',
+            ['searchString' => $string_s, 'results' => $result, 'typeLabels' => $TYPE_LABEL_MAP]);
+
     foreach ($result as $row) {
         $my_obj = $row->uriOggetto;
         $my_titolo = $row->titolo;
-	$my_wkt =  $row->ser;
-	$my_img =  $row->imageURL;
+    	$my_wkt =  $row->ser;
+    	$my_img =  $row->imageURL;
 
-// Replace http:// .... in WTK record
-	$replace = '"(<http?://.*)(?=>)>"';
-	$my_wkt = trim(preg_replace($replace, '', $my_wkt));
+        // Replace http:// .... in WTK record
+    	$replace = '"(<http?://.*)(?=>)>"';
+    	$my_wkt = trim(preg_replace($replace, '', $my_wkt));
 
-//DEBUG
-//	print_r($my_wkt);
+        //DEBUG
+        //	print_r($my_wkt);
 
-// Create array of results: $ind is index of results, each element of array contains another array with uriOggetto-titolo-ser-imageURL
-	$s_result[$ind]=array($my_obj,$my_titolo,$my_wkt, $my_img);
+        // Create array of results: $ind is index of results, each element of array contains another array with uriOggetto-titolo-ser-imageURL
+    	$s_result[$ind]=array($my_obj,$my_titolo,$my_wkt, $my_img);
 
-// Print on page results
-        echo "<li>".link_to($s_result[$ind][0],$s_result[$ind][0])."  Titolo:  $my_titolo "."    WTK:  $my_wkt"."  Img:  $my_img </li>\n";
-
-	$ind++;
+	    $ind++;
     }
 
 //DEBUG
@@ -82,13 +72,3 @@
 	$_SESSION['s_result'] = $s_result;
 
 ?>
-
-</ul>
-<p>Total number of results: <?= $result->numRows() ?></p>
-<?php
-// Link for opening results on maps usting showr_on_map.php page (results is in SESSION)
-?>
-<a href="./showr_on_map.php">Show record on maps</a>
-
-</body>
-</html>
