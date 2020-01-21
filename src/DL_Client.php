@@ -12,7 +12,7 @@ class DL_Client {
 
     private static $TYPE_MAP = [
         "object" => "dul:Object",
-        "project" => "project:Project",
+        "project" => "project:PublicInvestmentProject",
         "person" => "foaf:Person",
         "organization" => "org:Organization"
     ];
