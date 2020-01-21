@@ -12,7 +12,7 @@ class DL_Client {
 
     private static $TYPE_MAP = [
         "object" => "dul:Object",
-        "project" => "foaf:Project",
+        "project" => "project:Project",
         "person" => "foaf:Person",
         "organization" => "org:Organization"
     ];
@@ -27,6 +27,7 @@ class DL_Client {
                     ' PREFIX dcterms: <http://purl.org/dc/terms/>'.
                     ' PREFIX foaf: <http://xmlns.com/foaf/0.1/>' .
                     ' PREFIX org: <http://www.w3.org/ns/org#>' .
+                    ' PREFIX project: <https://w3id.org/italia/onto/Project/>' .
                     ' SELECT DISTINCT ?uriOggetto ?titolo ?ser ?imageURL WHERE {'.
                         ' ?uriOggetto a ?type .'.
                         ' ?uriOggetto dc:title ?titolo .'.
