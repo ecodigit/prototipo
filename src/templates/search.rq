@@ -1,0 +1,56 @@
+PREFIX dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX locn:  <https://www.w3.org/ns/locn#>
+PREFIX wgs84: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX org: <http://www.w3.org/ns/org#>
+PREFIX project: <https://w3id.org/italia/onto/Project/>
+SELECT DISTINCT ?uriOggetto ?titolo ?ser ?imageURL WHERE {
+    ?uriOggetto dc:title ?titolo .
+    OPTIONAL  {
+        ?uriOggetto locn:geometry ?geo .
+        ?geo geo:asWKT ?ser .
+    }
+    OPTIONAL {
+        ?uriOggetto dcterms:hasImage ?image .
+        ?image dcterms:URL ?imageURL .
+    }
+    FILTER (regex(?titolo, '{{ searchString }}', 'i')).
+
+    {% if filters.broadTypes and filters.broadTypes|length > 0 %}
+        {% set typeMap = {
+                "object": "dul:Object",
+                "project": "project:PublicInvestmentProject",
+                "person": "foaf:Person",
+                "organization": "org:Organization"} %}
+        ?uriOggetto a ?broadType .
+        FILTER (?broadType IN (
+            {{ filters.broadTypes|map(t => typeMap[t])|join(',') }}
+        )) .
+    {% endif %}
+
+    {% if filters.categories %}
+        {% for categoryGroup in filters.categories %}
+            {% if categoryGroup|length > 0 %}
+                ?uriOggetto dcterms:subject ?category_{{ loop.index }} .
+                FILTER (?category_{{ loop.index }} IN (
+                    {{ categoryGroup|map(c => "<https://w3id.org/ecodigit/resource/{c}>")|join(',') }}
+                )) .
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    {% if filters.specificTypes and filters.specificTypes|length > 0 %}
+        ?uriOggetto a ?specificType .
+        FILTER (?specificType IN (
+            {{ filters.specificTypes|map(t => "<https://w3id.org/ecodigit/resource/{t}>")|join(',') }}
+        )) .
+    {% endif %}
+
+}
+
+{% if limit %}
+    LIMIT {{ limit }}
+{% endif %}

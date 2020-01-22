@@ -1,18 +1,8 @@
 <?php
-    $started = session_start();
-    /**
-     * Making a SPARQL SELECT query
-     *
-     * This example creates a SPARQL query using EasyRdf package
-     *
-     * @package    EasyRdf
-     * @copyright  Copyright (c) 2009-2013 Nicholas J Humfrey
-     * @license    http://unlicense.org/
-     */
 
     require __DIR__ . '/../vendor/autoload.php';
 
-    $dl_client = new \Local\DL_Client();
+    session_start();
 
 //  Getting options from search form
 
@@ -30,6 +20,15 @@
         "organization" => "Organizzazioni"
     ];
 
+    // $twig = $_SESSION['twigEnvironment'];
+    // if (!$twig) {
+        $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../src/templates');
+        $twig = new \Twig\Environment($loader);
+    //     $_SESSION['twigEnvironment'] = $twig;
+    // }
+
+    $dl_client = new \Local\DL_Client();
+
 // DEBUG
     //print_r( $AreeDisc);
 
@@ -39,9 +38,6 @@
 // Create array of results
     $s_result = array();
     $ind = 0;
-
-    $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../src/templates');
-    $twig = new \Twig\Environment($loader);
 
     echo $twig->render('results.html',
             ['searchString' => $string_s, 'results' => $result, 'typeLabels' => $TYPE_LABEL_MAP]);
