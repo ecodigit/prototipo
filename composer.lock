@@ -4,8 +4,64 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9387c949934498eb6c3a2eb0bdcf1184",
+    "content-hash": "351df581b83fb6ae2264b8ec3613a4b9",
     "packages": [
+        {
+            "name": "athari/yalinqo",
+            "version": "v2.4.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Athari/YaLinqo.git",
+                "reference": "cb8afe0c03a9ea639f9a14ea78641abb2b7682fb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Athari/YaLinqo/zipball/cb8afe0c03a9ea639f9a14ea78641abb2b7682fb",
+                "reference": "cb8afe0c03a9ea639f9a14ea78641abb2b7682fb",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "phpdocumentor/phpdocumentor": "^2.8",
+                "phpunit/phpunit": "<6",
+                "satooshi/php-coveralls": "^2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "YaLinqo\\": "YaLinqo/"
+                },
+                "files": [
+                    "YaLinqo/Linq.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Alexander Prokhorov",
+                    "homepage": "https://github.com/Athari/"
+                }
+            ],
+            "description": "YaLinqo, a LINQ-to-objects library for PHP",
+            "homepage": "http://athari.github.io/YaLinqo",
+            "keywords": [
+                "linq",
+                "linqo",
+                "query",
+                "statistic"
+            ],
+            "time": "2019-01-10T20:41:46+00:00"
+        },
         {
             "name": "easyrdf/easyrdf",
             "version": "0.9.1",

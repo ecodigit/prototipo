@@ -1,0 +1,24 @@
+{{ include('prefixes.rq') }}
+
+SELECT * WHERE {
+#SELECT ?scheme ?schemeLabel ?category ?categoryLabel WHERE {
+    ?scheme a skos:ConceptScheme.
+    VALUES (?scheme ?schemeLabel ?schemeOrder) {
+        (ecodigit:area_disciplinare "Area Disciplinare" 1)
+        (ecodigit:disciplina "Disciplina" 2)
+        (ecodigit:settore_affine "Settore Affine" 3)
+#        (ecodigit:tematica "Tematica" 4)
+#        (ecodigit:tipologia "Tipologia" 5)
+    }.
+    OPTIONAL {
+        SELECT ?scheme ?category ?categoryLabel (COUNT(1) AS ?count) WHERE {
+            {{ include('simpleSearchPattern.rq') }}
+            ?item dcterms:subject ?category.
+            ?category
+                    skos:prefLabel ?categoryLabel;
+                    skos:inScheme ?scheme.
+        }
+        GROUP BY ?scheme ?category ?categoryLabel
+    }
+}
+ORDER BY ?schemeOrder ?category

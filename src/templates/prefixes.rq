@@ -1,0 +1,11 @@
+PREFIX dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX locn:  <https://www.w3.org/ns/locn#>
+PREFIX wgs84: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX org: <http://www.w3.org/ns/org#>
+PREFIX project: <https://w3id.org/italia/onto/Project/>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX ecodigit: <https://w3id.org/ecodigit/resource/>

@@ -14,10 +14,10 @@
     $Tipologie= $_GET['Tipologie'];
 
     $TYPE_LABEL_MAP = [
-        "object" => "Prodotti",
-        "project" => "Progetti",
-        "person" => "Persone",
-        "organization" => "Organizzazioni"
+        "Object" => "Prodotti",
+        "PublicInvestmentProject" => "Progetti",
+        "Person" => "Persone",
+        "Organization" => "Organizzazioni"
     ];
 
     // $twig = $_SESSION['twigEnvironment'];
@@ -32,20 +32,28 @@
 // DEBUG
     //print_r( $AreeDisc);
 
+    $resultCount = $dl_client->queryTotalCount($string_s);
+
+    $countByBroadType = $dl_client->queryCountByBroadType($string_s);
+
+    $facets = $dl_client->queryFacets($string_s);
+
     $result = $dl_client->queryEachType(
         $string_s, $AreeDisc, $Discipline,$Settori, $Tematiche, $Tipologie, 5);
 
-// Create array of results
-    $s_result = array();
-    $ind = 0;
-
     echo $twig->render('results.html',
-            ['searchString' => $string_s, 'results' => $result, 'typeLabels' => $TYPE_LABEL_MAP]);
+            ['searchString' => $string_s, 'resultCount' => $resultCount,
+            'countByBroadType' => $countByBroadType,
+            'results' => $result, 'facets' => $facets, 'typeLabels' => $TYPE_LABEL_MAP]);
+
+            // Create array of results
+                $s_result = array();
+                $ind = 0;
 
     foreach ($result as $row) {
-        $my_obj = $row->uriOggetto;
-        $my_titolo = $row->titolo;
-    	$my_wkt =  $row->ser;
+        $my_obj = $row->item;
+        $my_titolo = $row->title;
+    	$my_wkt =  $row->wktGeometry;
     	$my_img =  $row->imageURL;
 
         // Replace http:// .... in WTK record

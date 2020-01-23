@@ -14,10 +14,10 @@ class DL_Client {
     }
 
     private static $TYPE_MAP = [
-        "object" => "dul:Object",
-        "project" => "project:PublicInvestmentProject",
-        "person" => "foaf:Person",
-        "organization" => "org:Organization"
+        "Object" => "dul:Object",
+        "PublicInvestmentProject" => "project:PublicInvestmentProject",
+        "Person" => "foaf:Person",
+        "Organization" => "org:Organization"
     ];
 
     public function query($string_s, $item_types, $AreeDisc, $Discipline, $Settori, $Tematiche, $Tipologie, $limit) {
@@ -54,10 +54,38 @@ class DL_Client {
         }
 
         $query_s = $this->twig->render('search.rq', $params);
+        $result = $this->sparql_client->query($query_s);
 
-        //Submitting query
-        return $this->sparql_client->query($query_s);
+        return $result;
+    }
 
+    private static function console_log($obj) {
+        echo ' <script>console.log(`' . var_export($obj, true) . '`);</script> ';
+    }
+
+    public function queryTotalCount($string_s) {
+        $query_s = $this->twig->render('searchResultCount.rq', ['searchString' => $string_s]);
+        $result = $this->sparql_client->query($query_s);
+        return $result[0]->count;
+    }
+
+    public function queryCountByBroadType($string_s) {
+        $query_s = $this->twig->render('searchByBroadTypeCounts.rq', ['searchString' => $string_s]);
+        $result = $this->sparql_client->query($query_s);
+        return from($result)->toDictionary('$v->broadType->localName()', '$v->count->getValue()');
+    }
+
+    public function queryFacets($string_s) {
+        $query_s = $this->twig->render('searchFacets.rq', ['searchString' => $string_s]);
+        $result = $this->sparql_client->query($query_s);
+        $grouped = from($result)->groupBy(
+                '$v->scheme->localName()', NULL,
+                function ($e, $k) {
+                    return [ "id"=>$e[0]->scheme->localName(), "label"=>$e[0]->schemeLabel,
+                            "categories"=>from($e)->select('["id"=>($v->category ? $v->category->localName() : NULL), "label"=>$v->categoryLabel, "count"=>$v->count]')->toArray() ];
+                }
+                )->toArray();
+        return $grouped;
     }
 
     public function queryEachType(

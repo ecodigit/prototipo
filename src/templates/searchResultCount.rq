@@ -1,0 +1,5 @@
+{{ include('prefixes.rq') }}
+
+SELECT (COUNT(DISTINCT ?item) AS ?count) WHERE {
+    {{ include('simpleSearchPattern.rq') }}
+}

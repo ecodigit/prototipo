@@ -16,17 +16,15 @@
                             <!-- <label for="textSearch">Free text search</label> -->
                                 <div class="input-group">
 
-                                    <input
-                                      type="text" class="form-control" id="textSearch"
-                                      aria-describedby="button-search" value="{{searchString}}">
+                                    <input type="text" class="form-control" id="textSearch" name="search"
+                                            aria-describedby="button-search" value="{{searchString}}">
                                     <div class="input-group-append">
                                         <button type="submit" class="btn btn-primary" type="button" id="button-search">search</button>
                                     </div>
                                 </div>
                             <!-- <button type="submit" class="btn btn-primary">Search</button> -->
                             </div>
-                            <div id="advancedSearch">
-                            </div>
+                            {{ include('results-facets.html') }}
                         </form>
                     </div>
                 <!-- </div> -->
@@ -39,7 +37,7 @@
                     <div class="col"> -->
                     <div class="card mt-3 mb-3">
                         <div class="card-header" style="padding: .5rem 1rem;">
-                            {{ typeLabels[resultType] }}
+                            {{ typeLabels[resultType] }} ({{ countByBroadType[resultType] ? countByBroadType[resultType] : 0 }})
                         </div>
                         <div class="card-body" style="padding: .5rem 1rem;">
                         <!-- <div> -->
@@ -49,7 +47,7 @@
                         <ul>
                             {% for item in results[resultType] %}
                             <li>
-                                <a href="{{item.uriOggetto}}">{{item.titolo}}</a>
+                                <a href="{{item.item}}">{{item.title}}</a>
                             </li>
                             {% endfor %}
                         </ul>

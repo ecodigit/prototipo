@@ -1,0 +1,40 @@
+<div id="facetedSearch">
+  <small>
+  <div class="row">
+    {% for scheme in facets %}
+    {% set categoryFilter = filters.categories[scheme.id] %}
+      <div class="col"
+        <fieldset class="form-group">
+          <h6>{{ scheme.label }}
+            <small class="p-1">
+              {% if categoryFilter.size == 0 %}
+                <b>{{ categoryFilter.allLabel ? categoryFilter.allLabel : "tutti" }} ({{ resultCount }})</b>
+              {% else %}
+                <a href="#" class="text-reset">{{ categoryFilter.allLabel ? categoryFilter.allLabel : "tutti" }} ({{ resultCount }})</a>
+              {% endif %}
+            </small>
+          </h6>
+          <ul class="list-unstyled">
+            {% for category in scheme.categories %}
+            <li>
+            <!-- <div class="row">
+              <div class="col"> -->
+                {% if category.id in facetFilter %}
+                  <b>{{ category.id }} ({{ category.count }})</b>
+                {% elseif facetFilter.size == 0 %}
+                  <!-- <a href="#"><b>{{ option.label }} ({{ option.count }})</b></a> -->
+                  <a href="#" class="text-reset">{{ category.label }} ({{ category.count }})</a>
+                {% else %}
+                  <a href="#" class="text-reset">{{ category.label }} ({{ category.count }})</a>
+                {% endif %}
+              <!-- </div>
+            </div> -->
+              </li>
+            {% endfor %}
+          </ul>
+        </fieldset>
+      </div>
+    {% endfor %}
+  </div>
+  </small>
+</div>

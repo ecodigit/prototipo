@@ -1,0 +1,5 @@
+{{ include('prefixes.rq') }}
+
+SELECT ?broadType (COUNT(DISTINCT ?item) AS ?count) WHERE {
+    {{ include('advancedSearchPattern.rq') }}
+} GROUP BY ?broadType

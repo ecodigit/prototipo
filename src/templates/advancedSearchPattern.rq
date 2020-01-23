@@ -1,0 +1,30 @@
+{{ include('simpleSearchPattern.rq') }}
+
+{% if filters.broadTypes and filters.broadTypes|length > 0 %}
+    {% set typeMap = {
+            "Object": "dul:Object",
+            "PublicInvestmentProject": "project:PublicInvestmentProject",
+            "Person": "foaf:Person",
+            "Organization": "org:Organization"} %}
+    FILTER (?broadType IN (
+        {{ filters.broadTypes|map(t => typeMap[t])|join(',') }}
+    )) .
+{% endif %}
+
+{% if filters.categories %}
+    {% for categoryGroup in filters.categories %}
+        {% if categoryGroup|length > 0 %}
+            ?item dcterms:subject ?category_{{ loop.index }} .
+            FILTER (?category_{{ loop.index }} IN (
+                {{ categoryGroup|map(c => "<https://w3id.org/ecodigit/resource/{c}>")|join(',') }}
+            )) .
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+{% if filters.specificTypes and filters.specificTypes|length > 0 %}
+    ?item a ?specificType .
+    FILTER (?specificType IN (
+        {{ filters.specificTypes|map(t => "<https://w3id.org/ecodigit/resource/{t}>")|join(',') }}
+    )) .
+{% endif %}

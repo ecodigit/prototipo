@@ -1,0 +1,5 @@
+?item    a ?broadType;
+        dc:title ?title.
+FILTER (?broadType IN
+        (dul:Object, project:PublicInvestmentProject, foaf:Person, org:Organization)) .
+FILTER (regex(?title, '{{ searchString }}', 'i')).
