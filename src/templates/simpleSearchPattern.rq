@@ -1,5 +1,13 @@
-?item    a ?broadType;
+?item  a
+        {% if typeMap and filters.broadTypes and filters.broadTypes|length == 1%}
+            {{typeMap[filters.broadTypes[0]]}}
+        {% else %}
+            ?broadType
+        {% endif %};
         dc:title ?title.
-FILTER (?broadType IN
-        (dul:Object, project:PublicInvestmentProject, foaf:Person, org:Organization)) .
 FILTER (regex(?title, '{{ searchString }}', 'i')).
+
+{% if not filters.broadTypes %}
+    FILTER (?broadType IN
+            (dul:Object, project:PublicInvestmentProject, foaf:Person, org:Organization)) .
+{% endif %}

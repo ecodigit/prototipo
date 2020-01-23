@@ -1,11 +1,12 @@
+{% set typeMap = {
+        "Object": "dul:Object",
+        "PublicInvestmentProject": "project:PublicInvestmentProject",
+        "Person": "foaf:Person",
+        "Organization": "org:Organization"} %}
+
 {{ include('simpleSearchPattern.rq') }}
 
-{% if filters.broadTypes and filters.broadTypes|length > 0 %}
-    {% set typeMap = {
-            "Object": "dul:Object",
-            "PublicInvestmentProject": "project:PublicInvestmentProject",
-            "Person": "foaf:Person",
-            "Organization": "org:Organization"} %}
+{% if filters.broadTypes and filters.broadTypes|length > 1 %}
     FILTER (?broadType IN (
         {{ filters.broadTypes|map(t => typeMap[t])|join(',') }}
     )) .
