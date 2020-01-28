@@ -13,19 +13,48 @@
 {% endif %}
 
 {% if filters.categories %}
-    {% for categoryGroup in filters.categories %}
-        {% if categoryGroup|length > 0 %}
-            ?item dcterms:subject ?category_{{ loop.index }} .
-            FILTER (?category_{{ loop.index }} IN (
-                {{ categoryGroup|map(c => "<https://w3id.org/ecodigit/resource/{c}>")|join(',') }}
-            )) .
+    {% for scheme in filters.categories|keys %}
+        {% set categoryGroup = filters.categories[scheme] %}
+        {% set includesUncategorized = "Uncategorized" in categoryGroup %}
+        {% set categoryGroup = categoryGroup|filter(v => v != "Uncategorized") %}
+
+        {% if categoryGroup|length > 0 and includesUncategorized %}
+            {
         {% endif %}
+
+            {{ include('simpleSearchPattern.rq') }}
+            {% if categoryGroup|length > 0 %}
+                {% if categoryGroup|length > 1 %}
+                    ?item dcterms:subject ?category_{{ loop.index }} .
+                    FILTER (?category_{{ loop.index }} IN (
+                        {{ categoryGroup|map(c => "ecodigit:#{c}")|join(',') }}
+                    )).
+                {% else %}
+                    ?item dcterms:subject ecodigit:{{ categoryGroup[0] }}.
+                {% endif %}
+            {% endif %}
+
+        {% if categoryGroup|length > 0 and includesUncategorized %}
+            } UNION {
+        {% endif %}
+
+            {{ include('simpleSearchPattern.rq') }}
+            {% if includesUncategorized %}
+                FILTER NOT EXISTS {
+                    ?item dcterms:subject/skos:inScheme ecodigit:{{scheme}}.
+                }
+            {% endif %}
+
+        {% if categoryGroup|length > 0 and includesUncategorized %}
+            }
+        {% endif %}
+
     {% endfor %}
 {% endif %}
 
 {% if filters.specificTypes and filters.specificTypes|length > 0 %}
     ?item a ?specificType .
     FILTER (?specificType IN (
-        {{ filters.specificTypes|map(t => "<https://w3id.org/ecodigit/resource/{t}>")|join(',') }}
+        {{ filters.specificTypes|map(t => "ecodigit:#{t}")|join(',') }}
     )) .
 {% endif %}

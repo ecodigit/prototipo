@@ -7,11 +7,21 @@
 //  Getting options from search form
 
     $string_s = $_GET['search'];
-    $AreeDisc = $_GET['AreeDisc'];
-    $Discipline= $_GET['Discipline'];
-    $Settori= $_GET['Settori'];
-    $Tematiche= $_GET['Tematiche'];
     $Tipologie= $_GET['Tipologie'];
+
+    $filters = [];
+    $filter_categories = [];
+    $prefix = 'filter-categories-';
+    $prefix_length = strlen($prefix);
+    foreach ($_GET as $key => $value) {
+        if (substr($key, 0, $prefix_length) == $prefix) {
+            $filter_categories[substr($key, $prefix_length)] =
+                    is_array($value) ? $value : [$value];
+        }
+    }
+    if (!empty($filter_categories)) {
+        $filters['categories'] = $filter_categories;
+    }
 
     $TYPE_LABEL_MAP = [
         "Object" => "Prodotti",
@@ -34,16 +44,15 @@
 
     $resultCount = $dl_client->queryTotalCount($string_s);
 
-    $countByBroadType = $dl_client->queryCountByBroadType($string_s);
+    $countByBroadType = $dl_client->queryCountByBroadType($string_s, $filter_categories, $Tipologie);
 
     $facets = $dl_client->queryFacets($string_s);
 
-    $result = $dl_client->queryEachType(
-        $string_s, $AreeDisc, $Discipline,$Settori, $Tematiche, $Tipologie, 5);
+    $result = $dl_client->queryEachType($string_s, $filter_categories, $Tipologie, 10);
 
     echo $twig->render('results.html',
             ['searchString' => $string_s, 'resultCount' => $resultCount,
-            'countByBroadType' => $countByBroadType,
+            'countByBroadType' => $countByBroadType, 'filters' => $filters,
             'results' => $result, 'facets' => $facets, 'typeLabels' => $TYPE_LABEL_MAP]);
 
             // Create array of results

@@ -10,7 +10,8 @@ SELECT ?scheme ?schemeLabel ?category ?categoryLabel ?count WHERE {
 #        (ecodigit:tipologia "Tipologia" 5)
     }.
     {
-        SELECT ?scheme (false AS ?everythingElseCategory) ?category ?categoryLabel (COUNT(1) AS ?count) WHERE {
+        SELECT  ?scheme (false AS ?everythingElseCategory) ?category
+                ?categoryLabel (COUNT(DISTINCT ?item) AS ?count) WHERE {
             {{ include('simpleSearchPattern.rq') }}
             ?item dcterms:subject ?category.
             ?category
@@ -19,7 +20,9 @@ SELECT ?scheme ?schemeLabel ?category ?categoryLabel ?count WHERE {
         }
         GROUP BY ?scheme ?category ?categoryLabel
     } UNION {
-        SELECT ?scheme (true AS ?everythingElseCategory) (ecodigit:Uncategorized AS ?category) (COUNT(1) AS ?count) WHERE {
+        SELECT  ?scheme (true AS ?everythingElseCategory)
+                (ecodigit:Uncategorized AS ?category)
+                (COUNT(DISTINCT ?item) AS ?count) WHERE {
             {{ include('simpleSearchPattern.rq') }}
             FILTER NOT EXISTS {
                 ?item dcterms:subject/skos:inScheme ?scheme.

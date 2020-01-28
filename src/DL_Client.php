@@ -20,28 +20,15 @@ class DL_Client {
         "Organization" => "org:Organization"
     ];
 
-    public function query($string_s, $item_types, $AreeDisc, $Discipline, $Settori, $Tematiche, $Tipologie, $limit) {
+    public function query($string_s, $item_types, $filter_categories, $Tipologie, $limit) {
 
         $filters = [];
         if (!empty($item_types)) {
             $filters['broadTypes'] = $item_types;
         }
 
-        $filterCategories = [];
-        if (!empty($AreeDisc)) {
-            $filterCategories['AreeDisc'] = $AreeDisc;
-        }
-        if (!empty($Discipline)) {
-            $filterCategories['Discipline'] = $Discipline;
-        }
-        if (!empty($Settori)) {
-            $filterCategories['Settori'] = $Settori;
-        }
-        if (!empty($Tematiche)) {
-            $filterCategories['Tematiche'] = $Tematiche;
-        }
-        if (!empty($filterCategories)) {
-            $filters['categories'] = $filterCategories;
+        if (!empty($filter_categories)) {
+            $filters['categories'] = $filter_categories;
         }
 
         if (!empty($Tipologie)) {
@@ -54,8 +41,8 @@ class DL_Client {
         }
 
         $query_s = $this->twig->render('search.rq', $params);
+#        $this::console_log($query_s);
         $result = $this->sparql_client->query($query_s);
-
         return $result;
     }
 
@@ -69,8 +56,16 @@ class DL_Client {
         return $result[0]->count;
     }
 
-    public function queryCountByBroadType($string_s) {
-        $query_s = $this->twig->render('searchByBroadTypeCounts.rq', ['searchString' => $string_s]);
+    public function queryCountByBroadType($string_s, $filter_categories, $Tipologie) {
+        $filters = [];
+        if (!empty($filter_categories)) {
+            $filters['categories'] = $filter_categories;
+        }
+        if (!empty($Tipologie)) {
+            $filters['specificTypes'] = $Tipologie;
+        }
+        $query_s = $this->twig->render('searchByBroadTypeCounts.rq',
+                ['searchString' => $string_s, 'filters' => $filters]);
         $result = $this->sparql_client->query($query_s);
         return from($result)->toDictionary('$v->broadType->localName()', '$v->count->getValue()');
     }
@@ -89,13 +84,12 @@ class DL_Client {
     }
 
     public function queryEachType(
-                $string_s, $AreeDisc, $Discipline, $Settori, $Tematiche,
+                $string_s, $filter_categories,
                 $Tipologie, $limit) {
         $results = [];
         foreach(array_keys($this::$TYPE_MAP) as $type) {
             $results[$type] = $this->query(
-                    $string_s, [$type], $AreeDisc, $Discipline, $Settori,
-                    $Tematiche, $Tipologie, $limit);
+                    $string_s, [$type], $filter_categories, $Tipologie, $limit);
         }
         return $results;
     }

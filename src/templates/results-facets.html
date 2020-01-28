@@ -3,7 +3,7 @@
         <div class="row">
             {% for scheme in facets %}
                 {% set categoryFilter = filters.categories[scheme.id] %}
-                {% set noCategorySelected = categoryFilter.size == 0 %}
+                {% set noCategorySelected = categoryFilter|length == 0 %}
                 <div class="col"
                     <fieldset class="form-group">
                         <h6>{{ scheme.label }}
@@ -20,9 +20,9 @@
                                 {% set categoryIsSelected = category.id in categoryFilter %}
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox"
-                                    name="filter_{{ scheme.id }}" value="{{ category.id }}"
+                                    name="filter-categories-{{ scheme.id }}[]" value="{{ category.id }}"
                                     id="input-{{ scheme.id }}-{{ category.id }}"
-                                    {{ categoryIsSelected or categoryFilter.size == 0 ? "checked" : ""}}>
+                                    {{ categoryIsSelected or noCategorySelected ? "checked" : ""}}>
                                     <label class="form-check-label" for="input-{{ scheme.id }}-{{ category.id }}">
                                         {% set uncategorized = category.id == "Uncategorized" %}
                                         {% set categoryLabel = uncategorized ? "non classificati" : category.label %}
