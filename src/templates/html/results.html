@@ -7,30 +7,23 @@
     </head>
     <body>
 
-        <div class="container">
+        <div class="container pt-3">
             <div class="row">
                 <div class="col">
-                    <div class="p-3">
+                    <div class="px-3">
                         {{ include('simple-search-form.html') }}
                         {{ include('advanced-search-form.html') }}
                     </div>
-                <!-- </div> -->
                 </div>
             </div>
             <div class="row" style="border-top: 1px solid rgba(0,0,0,.1);">
                 <div class="col">
                     {% for resultType in results|keys %}
-                    <!-- <div class="row">
-                    <div class="col"> -->
                     <div class="card mt-3 mb-3">
                         <div class="card-header" style="padding: .5rem 1rem;">
                             {{ typeLabels[resultType] }} ({{ countByBroadType[resultType] ? countByBroadType[resultType] : 0 }})
                         </div>
                         <div class="card-body" style="padding: .5rem 1rem;">
-                        <!-- <div> -->
-                        <!-- <h6 class="card-title">{{group.label}}</h6> -->
-                        <!-- <ul class="list-unstyled" style="margin-bottom: 0;"> -->
-                        <!-- <ul class="list-unstyled"> -->
                         <ul>
                             {% for item in results[resultType] %}
                             <li>
@@ -38,15 +31,14 @@
                             </li>
                             {% endfor %}
                         </ul>
-                        <!-- </div> -->
                         </div>
                     </div>
-                    <!-- </div>
-                    </div> -->
                     {% endfor %}
                     </div>
                     <div class="col">
+                        <div class="card mt-3 mb-3">
                         {{ include('map.html') }}
+                        </div>
                         <!-- <a href="./showr_on_map.php">Show record on maps</a> -->
                     </div>
                 </div>
