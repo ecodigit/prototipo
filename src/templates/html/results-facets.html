@@ -4,14 +4,22 @@
             {% for scheme in facets %}
                 {% set categoryFilter = filters.categories[scheme.id] %}
                 {% set noCategorySelected = categoryFilter|length == 0 %}
+                <input  type="hidden" name="filter-categories-{{ scheme.id }}[]"
+                        value="EmptyCategory" />
                 <div class="col">
                     <fieldset class="form-group">
                         <h6>{{ scheme.label }}
                             <small class="p-1">
                                 {% if noCategorySelected %}
-                                    <b>{{ categoryFilter.allLabel ? categoryFilter.allLabel : "tutti" }} ({{ resultCount }})</b>
+                                    {{ categoryFilter.allLabel ? categoryFilter.allLabel : "tutti" }} ({{ resultCount }})
                                 {% else %}
-                                    <a href="#" class="text-reset">{{ categoryFilter.allLabel ? categoryFilter.allLabel : "tutti" }} ({{ resultCount }})</a>
+                                    <a      href="#" class="text-reset"
+                                            onclick="
+                                                event.preventDefault();
+                                                $(this).closest('fieldset').find('input').prop('checked', true);
+                                                $(this).closest('form').submit();">
+                                        {{ categoryFilter.allLabel ? categoryFilter.allLabel : "tutti" }}
+                                        ({{ resultCount }})</a>
                                 {% endif %}
                             </small>
                         </h6>
@@ -29,7 +37,6 @@
                                         {% set uncategorized = category.id == "Uncategorized" %}
                                         {% set categoryLabel = uncategorized ? "non classificati" : category.label %}
                                         <span   style="
-                                                    {{ isOnlySelectedCategory ? '' : 'cursor:pointer;'}}
                                                     {{ uncategorized ? 'font-style:italic; ' : ''}}"
                                                 onclick="
                                                     event.preventDefault();
@@ -37,7 +44,14 @@
                                                     $(this).closest('fieldset').find('input').not(relatedCheckbox).prop('checked', false);
                                                     relatedCheckbox.prop('checked', true);
                                                     $(this).closest('form').submit();" }}>
-                                            {{ categoryLabel }} ({{ category.count }})
+                                            {% if not isOnlySelectedCategory %}
+                                                <a href="#" class="text-reset">
+                                            {% endif %}
+                                                    {{ categoryLabel }} ({{ category.count }})
+                                            {% if not isOnlySelectedCategory %}
+                                                </a>
+                                            {% endif %}
+                                            </a>
                                         </span>
                                     </label>
                                 </div>
