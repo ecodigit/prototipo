@@ -48,7 +48,7 @@
 
     $facets = $dl_client->queryFacets($string_s);
 
-    $result = $dl_client->queryEachType($string_s, $filter_categories, $Tipologie, 10);
+    $result = $dl_client->queryEachType($string_s, $filter_categories, $Tipologie, 5);
 
     echo $twig->render('results.html',
             ['searchString' => $string_s, 'resultCount' => $resultCount,
