@@ -4,8 +4,8 @@
         {% else %}
             ?broadType
         {% endif %};
-        dc:title ?title.
-FILTER (regex(?title, '{{ searchString }}', 'i')).
+        dc:title ?matchingTitle.
+FILTER (regex(?matchingTitle, '{{ searchString }}', 'i')).
 
 {% if not filters.broadTypes %}
     FILTER (?broadType IN

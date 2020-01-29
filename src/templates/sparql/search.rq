@@ -1,17 +1,15 @@
 {{ include('prefixes.rq') }}
 
-#SELECT ?item (SAMPLE(?title) AS ?title) (SAMPLE(?imageURL) AS ?imageURL) WHERE {
-SELECT DISTINCT ?item ?title ?imageURL ?wktGeometry WHERE {
+SELECT ?item (SAMPLE(?matchingTitle) AS ?title)
+        (SAMPLE(?someImageURL) AS ?imageURL)
+        (SAMPLE(?someWktGeometry) AS ?wktGeometry) WHERE {
+#SELECT DISTINCT ?item ?title ?imageURL ?wktGeometry WHERE {
     {{ include('advancedSearchPattern.rq') }}
-    OPTIONAL {
-        ?item dcterms:hasImage ?image .
-        ?image dcterms:URL ?imageURL .
-    }
-    OPTIONAL  {
-        ?item locn:geometry ?geo .
-        ?geo geo:asWKT ?wktGeometry .
-    }
-} #GROUP BY ?item
+    OPTIONAL {?item dcterms:hasImage/dcterms:URL ?someImageURL}.
+    OPTIONAL {?item locn:geometry/geo:asWKT ?someWktGeometry}.
+}
+GROUP BY ?item
+ORDER BY ?item
 
 {% if limit %}
     LIMIT {{ limit }}
