@@ -22,7 +22,9 @@
         "twbs/bootstrap": "4.3.*",
         "openlayers/openlayers": "5.2.0",
         "twig/twig": "^3.0",
-        "athari/yalinqo": "^2.4"
+        "athari/yalinqo": "^2.4",
+        "components/jquery": "^3.4",
+        "fortawesome/font-awesome": "^5.12"
     },
     "require-dev": {
         "phing/phing": "2.16.*"

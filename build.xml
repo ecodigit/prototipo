@@ -14,9 +14,27 @@
             <fileset dir="./public_html"></fileset>
         </copy>
 
+        <echo msg="Copying jquery files..." />
+        <copy todir="./dist/public_html/js">
+            <fileset dir="./vendor/components/jquery">
+                <include name="**/*.js" />
+                <include name="**/*.map" />
+            </fileset>
+        </copy>
+
         <echo msg="Copying bootstrap files..." />
         <copy todir="./dist/public_html/css">
             <fileset dir="./vendor/twbs/bootstrap/dist/css"></fileset>
+        </copy>
+        <copy todir="./dist/public_html/js">
+            <fileset dir="./vendor/twbs/bootstrap/dist/js"></fileset>
+        </copy>
+
+        <echo msg="Copying fontawesome file..." />
+        <copy todir="./dist/public_html/js">
+            <fileset dir="./vendor/fortawesome/font-awesome/js">
+                <include name="all.min.js" />
+            </fileset>
         </copy>
         <copy todir="./dist/public_html/js">
             <fileset dir="./vendor/twbs/bootstrap/dist/js"></fileset>
