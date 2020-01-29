@@ -11,21 +11,8 @@
             <div class="row">
                 <div class="col">
                     <div class="p-3">
-                        <form>
-                            <div class="form-group">
-                            <!-- <label for="textSearch">Free text search</label> -->
-                                <div class="input-group">
-
-                                    <input type="text" class="form-control" id="textSearch" name="search"
-                                            aria-describedby="button-search" value="{{searchString}}">
-                                    <div class="input-group-append">
-                                        <button type="submit" class="btn btn-primary" type="button" id="button-search">search</button>
-                                    </div>
-                                </div>
-                            <!-- <button type="submit" class="btn btn-primary">Search</button> -->
-                            </div>
-                            {{ include('results-facets.html') }}
-                        </form>
+                        {{ include('simple-search-form.html') }}
+                        {{ include('advanced-search-form.html') }}
                     </div>
                 <!-- </div> -->
                 </div>

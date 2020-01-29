@@ -9,7 +9,7 @@ class DL_Client {
 
     function __construct() {
         $this->sparql_client = new \EasyRdf_Sparql_Client('http://150.146.207.67/sparql/ds');
-        $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../src/templates');
+        $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../src/templates/sparql');
         $this->twig = new \Twig\Environment($loader, ['autoescape' => false]);
     }
 

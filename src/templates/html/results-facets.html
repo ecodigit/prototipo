@@ -4,7 +4,7 @@
             {% for scheme in facets %}
                 {% set categoryFilter = filters.categories[scheme.id] %}
                 {% set noCategorySelected = categoryFilter|length == 0 %}
-                <div class="col"
+                <div class="col">
                     <fieldset class="form-group">
                         <h6>{{ scheme.label }}
                             <small class="p-1">
@@ -18,29 +18,29 @@
                         <ul class="list-unstyled">
                             {% for category in scheme.categories %}
                                 {% set categoryIsSelected = category.id in categoryFilter %}
+                                {% set isOnlySelectedCategory = categoryIsSelected and categoryFilter|length == 1 %}
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox"
                                     name="filter-categories-{{ scheme.id }}[]" value="{{ category.id }}"
                                     id="input-{{ scheme.id }}-{{ category.id }}"
+                                    onchange="$(this.form).submit();"
                                     {{ categoryIsSelected or noCategorySelected ? "checked" : ""}}>
                                     <label class="form-check-label" for="input-{{ scheme.id }}-{{ category.id }}">
                                         {% set uncategorized = category.id == "Uncategorized" %}
                                         {% set categoryLabel = uncategorized ? "non classificati" : category.label %}
-                                        <span style="{{ categoryIsSelected ? 'font-weight:bold; ' : 'cursor:pointer; '}}{{ uncategorized ? 'font-style:italic; ' : ''}}">
+                                        <span   style="
+                                                    {{ isOnlySelectedCategory ? '' : 'cursor:pointer;'}}
+                                                    {{ uncategorized ? 'font-style:italic; ' : ''}}"
+                                                onclick="
+                                                    event.preventDefault();
+                                                    relatedCheckbox = $(this).closest('.form-check').find('input');
+                                                    $(this).closest('fieldset').find('input').not(relatedCheckbox).prop('checked', false);
+                                                    relatedCheckbox.prop('checked', true);
+                                                    $(this).closest('form').submit();" }}>
                                             {{ categoryLabel }} ({{ category.count }})
                                         </span>
                                     </label>
                                 </div>
-
-                                <!-- <li>
-                                {% if category.id in facetFilter %}
-                                <b>{{ category.id }} ({{ category.count }})</b>
-                                {% elseif facetFilter.size == 0 %}
-                                <a href="#" class="text-reset">{{ category.label }} ({{ category.count }})</a>
-                                {% else %}
-                                <a href="#" class="text-reset">{{ category.label }} ({{ category.count }})</a>
-                                {% endif %}
-                            </li> -->
                             {% endfor %}
                         </ul>
                     </fieldset>

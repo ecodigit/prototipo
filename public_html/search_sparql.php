@@ -32,7 +32,7 @@
 
     // $twig = $_SESSION['twigEnvironment'];
     // if (!$twig) {
-        $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../src/templates');
+        $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../src/templates/html');
         $twig = new \Twig\Environment($loader);
     //     $_SESSION['twigEnvironment'] = $twig;
     // }

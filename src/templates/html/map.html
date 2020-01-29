@@ -87,12 +87,13 @@
 
 <script>
 
-    initialize_map();
+    {% autoescape 'js' %}
+        initialize_map();
 
-    {% for resultType in results|keys %}
-        {% for item in results[resultType] %}
-            add_map_point('{{item.wktGeometry}}', '{{item.title}}', '{{item.url}}', '{{item.imageURL}}');
+        {% for resultType in results|keys %}
+            {% for item in results[resultType] %}
+                add_map_point('{{item.wktGeometry|raw}}', '{{item.title}}', '{{item.url}}', '{{item.imageURL}}');
+            {% endfor %}
         {% endfor %}
-    {% endfor %}
-
+    {% endautoescape %}
 </script>
