@@ -7,8 +7,11 @@ class DL_Client {
     private $sparql_client;
     private $twig;
 
-    function __construct() {
-        $this->sparql_client = new \EasyRdf_Sparql_Client('http://150.146.207.67/sparql/ds');
+    function __construct($config) {
+        $sparql_client_url = ($config and $config['sparql_endpoint_url']) ?
+                $config['sparql_endpoint_url'] :
+                '/sparql/ds';
+        $this->sparql_client = new \EasyRdf_Sparql_Client($sparql_client_url);
         $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../src/templates/sparql');
         $this->twig = new \Twig\Environment($loader, ['autoescape' => false]);
     }
@@ -41,7 +44,7 @@ class DL_Client {
         }
 
         $query_s = $this->twig->render('search.rq', $params);
-#        $this::console_log($query_s);
+        $this::console_log($query_s);
         $result = $this->sparql_client->query($query_s);
         return $result;
     }
@@ -91,6 +94,7 @@ class DL_Client {
             $results[$type] = $this->query(
                     $string_s, [$type], $filter_categories, $Tipologie, $limit);
         }
+#        $this::console_log(from($query_s)->map('"$k: $v"')->join(','));
         return $results;
     }
 

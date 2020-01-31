@@ -4,6 +4,15 @@
 
     session_start();
 
+    $config = [
+        "sparql_endpoint_url" =>
+                $_ENV["CONFIG_SPARQL_ENDPOINT_URL"] ? $_ENV["CONFIG_SPARQL_ENDPOINT_URL"] : "/sparql/ds",
+        "model_viewer_url" =>
+                $_ENV["CONFIG_3D_VIEWER_URL"] ? $_ENV["CONFIG_3D_VIEWER_URL"] : "/3dhop_ecodigit/assembler.php",
+        "model_viewer_param" =>
+                $_ENV["CONFIG_3D_VIEWER_PARAM"] ? $_ENV["CONFIG_3D_VIEWER_PARAM"] : "url"
+    ];
+
 //  Getting options from search form
 
     $string_s = $_GET['search'];
@@ -37,7 +46,7 @@
     //     $_SESSION['twigEnvironment'] = $twig;
     // }
 
-    $dl_client = new \Local\DL_Client();
+    $dl_client = new \Local\DL_Client($config);
 
 // DEBUG
     //print_r( $AreeDisc);
@@ -53,7 +62,8 @@
     echo $twig->render('results.html',
             ['searchString' => $string_s, 'resultCount' => $resultCount,
             'countByBroadType' => $countByBroadType, 'filters' => $filters,
-            'results' => $result, 'facets' => $facets, 'typeLabels' => $TYPE_LABEL_MAP]);
+            'results' => $result, 'facets' => $facets,
+            'typeLabels' => $TYPE_LABEL_MAP, 'config' => $config]);
 
             // Create array of results
                 $s_result = array();

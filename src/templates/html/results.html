@@ -27,7 +27,20 @@
                         <ul>
                             {% for item in results[resultType] %}
                             <li>
-                                <a href="{{item.item}}">{{item.title}}</a>
+                                {% if item.is3dModel and config.model_viewer_url %}
+                                    {% set href = config.model_viewer_url ~ '?' ~ {(config.model_viewer_param|default('url')):item.item}|url_encode %}
+                                {% elseif item.isGeo and config.geo_viewer_url %}
+                                    {% set href = config.geo_viewer_url ~ '?' ~ {(config.geo_viewer_param|default('url')):item.item}|url_encode %}
+                                {% else %}
+                                    {% set href = item.item %}
+                                {% endif %}
+                                <a href="{{href}}">{{item.title}}
+                                    {% if item.is3dModel %}
+                                        <i class="fas fa-cube"></i>
+                                    {% elseif item.isGeo %}
+                                        <i class="fas fa-globe-africa"></i>
+                                    {% endif %}
+                                </a>
                             </li>
                             {% endfor %}
                         </ul>

@@ -2,13 +2,16 @@
 
 SELECT ?item (SAMPLE(?matchingTitle) AS ?title)
         (SAMPLE(?someImageURL) AS ?imageURL)
-        (SAMPLE(?someWktGeometry) AS ?wktGeometry) WHERE {
+        (SAMPLE(?someWktGeometry) AS ?wktGeometry)
+        ?isGeo ?is3dModel WHERE {
 #SELECT DISTINCT ?item ?title ?imageURL ?wktGeometry WHERE {
     {{ include('advancedSearchPattern.rq') }}
     OPTIONAL {?item dcterms:hasImage/dcterms:URL ?someImageURL}.
     OPTIONAL {?item locn:geometry/geo:asWKT ?someWktGeometry}.
+    OPTIONAL {?item a virtualEnv:GeographicalObject. BIND(true AS ?isGeo)}.
+    OPTIONAL {?item a virtualEnv:3DModel. BIND(true AS ?is3dModel)}.
 }
-GROUP BY ?item
+GROUP BY ?item ?isGeo ?is3dModel
 ORDER BY ?item
 
 {% if limit %}

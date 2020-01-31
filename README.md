@@ -19,7 +19,10 @@ Any other available port can be used.
 - Enable auto-build
   `./bin/buildWatch.sh` (CTRL-C to quit)
 
-- Start HTTP server (in another shell)
+- In a new shell, set system environment variable pointing to the SPARQL endpoint
+  `export CONFIG_SPARQL_ENDPOINT_URL=http://150.146.207.67/sparql/ds`
+
+- Start HTTP server (in the same shell)
   `./bin/serve.sh 5000` (CTRL-C to quit)
 
 ##### As docker container
