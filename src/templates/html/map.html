@@ -1,101 +1,194 @@
-  <script>
-    var map;
+<div id="map"></div>
+<!-- <div id="popup" class="ol-popup">
+  <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+  <div id="popup-content"></div>
+</div> -->
+<script>
+{% autoescape 'js' %}
+
+    // /**
+    //  * Elements that make up the popup.
+    //  */
+    // var popupContainer = document.getElementById('popup');
+    // var popupContent = document.getElementById('popup-content');
+    // var popupCloser = document.getElementById('popup-closer');
+    //
+    //
+    // /**
+    //  * Create an overlay to anchor the popup to the map.
+    //  */
+    // var popupOverlay = new ol.Overlay({
+    //   element: popupContainer,
+    //   autoPan: true,
+    //   autoPanAnimation: {
+    //     duration: 250
+    //   }
+    // });
+    //
+    // function closePopup() {
+    //     popupOverlay.setPosition(undefined);
+    //     popupCloser.blur();
+    // }
+
+    // /**
+    //  * Add a click handler to hide the popup.
+    //  * @return {boolean} Don't follow the href.
+    //  */
+    // popupCloser.onclick = function() {
+    //     closePopup();
+    //     return false;
+    // };
+
 
 // Center the maps in Rome and zooming all region
     var mapLat = 41.9028;
     var mapLng = 12.4964;
     var mapDefaultZoom = 10;
 
+    var wktFormat = new ol.format.WKT();
 
-    function initialize_map() {
-      map = new ol.Map({
+    var features = [];
+
+    function add_map_point(wkt, desc, url, img) {
+        var mfeature = wktFormat.readFeature(wkt);
+        features.push(new ol.Feature({
+            desc: desc,
+            url: url,
+            image: img,
+            geometry: mfeature.getGeometry().transform('EPSG:4326', 'EPSG:3857'),
+        }));
+    }
+
+    {% for resultType in results|keys %}
+        {% for item in results[resultType] %}
+            {% if item.wktGeometry %}
+                add_map_point('{{item.wktGeometry|replace({"<http://www.opengis.net/def/crs/OGC/1.3/CRS84>": ""})|trim|raw}}', '{{item.title}}', '{{item.item}}', '{{item.imageURL}}');
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+
+
+    // function initialize_map() {
+
+    var tileLayer = new ol.layer.Tile({
+        source: new ol.source.OSM({
+          url: "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        })
+    });
+
+    var featureSource = new ol.source.Vector({features: features});
+    var featureLayer = new ol.layer.Vector({
+        source: featureSource,
+        // style: new ol.style.Style({
+        //     fill: new ol.style.Fill({
+        //         color: 'rgba(255, 255, 255, 0.2)'
+        //     }),
+        //     stroke: new ol.style.Stroke({
+        //         color: '#007bff',
+        //         width: 2
+        //     }),
+        //     image: new ol.style.Circle({
+        //         radius: 7,
+        //         // fill: new ol.style.Fill({
+        //         //     color: '#ffcc33'
+        //         // }),
+        //         stroke: new ol.style.Stroke({
+        //             color: '#007bff',
+        //             width: 2
+        //         })
+        //     })
+        // })
+    });
+
+    // var selection = new ol.interaction.Select({
+    //     source: featureSource,
+    //     multi: true // for multiple selection
+    // });
+
+    // var map;
+
+    // selection.on('select', function(evt) {
+    //     console.log('select!');
+    //     if (evt.selected.length > 0) {
+    //         // show popup with the selectedFeatures
+    //         popupContent.innerHTML = '<ul>' + evt.selected.map(function (feature) {
+    //             return '<li><a href="' + feature.get('url') + '">' + feature.get('title') + '</a></li>'
+    //         }).join('') + '</ul>';
+    //         console.log(popupContent.innerHTML);
+    //         console.log(evt.pageX);
+    //         var evtCoordinate = map.getCoordinateFromPixel(new ol.Pixel([0,0]));
+    //         popupOverlay.setPosition(evtCoordinate);
+    //     } else {
+    //         closePopup();
+    //     }
+    // });
+
+    var popup = new ol.Overlay.Popup();
+
+    var map = new ol.Map({
         target: "map",
-        layers: [
-            new ol.layer.Tile({
-                source: new ol.source.OSM({
-                      url: "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                })
-            })
-        ],
+        layers: [tileLayer, featureLayer],
+        overlays: [popup],
         view: new ol.View({
             center: ol.proj.fromLonLat([mapLng, mapLat]),
             zoom: mapDefaultZoom
-        })
-      });
-    }
-    function add_map_point(wkt, desc, url, img) {
-// Parsing WTK record
-	var format = new ol.format.WKT();
-	var mfeature = format.readFeature(wkt);
-
-// Prepare record on Map adding informations about Object-description-url-img
-      var vectorLayer = new ol.layer.Vector({
-        source:new ol.source.Vector({
-          features: [new ol.Feature({
-                type: 'click',
-                desc: desc,
-                url: url,
-                image: img,
-                geometry: mfeature.getGeometry().transform('EPSG:4326', 'EPSG:3857'),
-            })]
-        })
+        }),
+        // interactions: [selection]
     });
-      map.addLayer(vectorLayer);
-      var popup = new ol.Overlay.Popup();
-      map.addOverlay(popup);
+    // }
 
-// Add an event handler for when someone clicks on a marker
-      map.on('singleclick', function(evt) {
 
-// Hide existing popup and reset it's offset
-       popup.hide();
-       popup.setOffset([0, 0]);
+    // Add an event handler for when someone clicks on a marker
+    map.on('singleclick', function(evt) {
 
-// Attempt to find a feature in one of the visible vector layers
-       var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
-            return feature;
-                });
-            if (feature) {
-                var coord = feature.getGeometry().getCoordinates();
-                var props = feature.getProperties();
-                var info = '<a style="color:black; font-weight:600; font-size:11px" href="' + props.url + '">' +
-                '<img width="200" src="' +  props.image + '"  />' +
-                '<div style="width:220px; margin-top:3px">' + props.desc + '</div></a>';
+        // Hide existing popup and reset it's offset
+        popup.hide();
+        popup.setOffset([0, 0]);
 
-// Offset the popup so it points at the middle of the marker not the tip
-                popup.setOffset([0, -22]);
-                popup.show(coord, info);
-            }
-        });
+
+        var clickedFeatures = map.getFeaturesAtPixel(evt.pixel);
+        var info = '<ul>' + clickedFeatures.map(function (feature) {
+            return '<li><a href="' + feature.get('url') + '">' + feature.get('desc') + '</a></li>'
+        }).join('') + '</ul>';
+
+        var coord = map.getCoordinateFromPixel(evt.pixel);
+
+        // Offset the popup so it points at the middle of the marker not the tip
+        popup.setOffset([0, -22]);
+        popup.show(coord, info);
+    });
+
+        // console.log(popupContent.innerHTML);
+        // console.log(evt.pageX);
+        // var evtCoordinate = map.getCoordinateFromPixel(new ol.Pixel([0,0]));
+        // popupOverlay.setPosition(evtCoordinate);
+            // return feature;
+            //     });
+//             if (feature) {
+//                 var coord = feature.getGeometry().getCoordinates();
+//                 var props = feature.getProperties();
+//                 var info = '<a style="color:black; font-weight:600; font-size:11px" href="' + props.url + '">' +
+//                 '<img width="200" src="' +  props.image + '"  />' +
+//                 '<div style="width:220px; margin-top:3px">' + props.desc + '</div></a>';
+//
+// // Offset the popup so it points at the middle of the marker not the tip
+//                 popup.setOffset([0, -22]);
+//                 popup.show(coord, info);
+//             }
+//         });
 
 // Add an event handler for when someone hovers over a marker
 // This changes the cursor to a pointer
-        map.on("pointermove", function (evt) {
-            var hit = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
-                return true;
-            });
-            if (hit) {
-                this.getTargetElement().style.cursor = 'pointer';
-            } else {
-                this.getTargetElement().style.cursor = '';
-            }
+    map.on("pointermove", function (evt) {
+        var hit = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
+            return true;
         });
-    }
-  </script>
-
-<div id="map"></div>
-
-<script>
-
-    {% autoescape 'js' %}
-        initialize_map();
-
-        {% for resultType in results|keys %}
-            {% for item in results[resultType] %}
-                {% if item.wktGeometry %}
-                    add_map_point('{{item.wktGeometry|replace({"<http://www.opengis.net/def/crs/OGC/1.3/CRS84>": ""})|trim|raw}}', '{{item.title}}', '{{item.item}}', '{{item.imageURL}}');
-                {% endif %}
-            {% endfor %}
-        {% endfor %}
-    {% endautoescape %}
-</script>
+        if (hit) {
+            this.getTargetElement().style.cursor = 'pointer';
+        } else {
+            this.getTargetElement().style.cursor = '';
+        }
+    });
+    
+{% endautoescape %}
+ </script>

@@ -44,7 +44,7 @@ class DL_Client {
         }
 
         $query_s = $this->twig->render('search.rq', $params);
-        $this::console_log($query_s);
+#        $this::console_log($query_s);
         $result = $this->sparql_client->query($query_s);
         return $result;
     }
