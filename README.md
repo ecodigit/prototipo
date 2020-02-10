@@ -30,7 +30,7 @@ Any other available port can be used.
 - Build image:
   `docker build -t prototipo .`
 - Run image (create container and start it):
-  `docker run -p 127.0.0.1:5000:80/tcp -d --name prototipo prototipo`
+  `docker run -p 127.0.0.1:5000:80/tcp -e CONFIG_SPARQL_ENDPOINT_URL=http://150.146.207.67/sparql/ds -d --name prototipo prototipo`
 - Stop container:
   `docker stop prototipo`
 - Stop container:
