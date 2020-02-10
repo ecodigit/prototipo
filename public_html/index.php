@@ -6,7 +6,7 @@
 
     $config = [
         "sparql_endpoint_url" =>
-                $_ENV["CONFIG_SPARQL_ENDPOINT_URL"] ? $_ENV["CONFIG_SPARQL_ENDPOINT_URL"] : "/sparql/ds",
+                $_ENV["CONFIG_SPARQL_ENDPOINT_URL"] ? $_ENV["CONFIG_SPARQL_ENDPOINT_URL"] : "http://localhost/sparql/ds",
         "model_viewer_url" =>
                 $_ENV["CONFIG_3D_VIEWER_URL"] ? $_ENV["CONFIG_3D_VIEWER_URL"] : "/3dhop_ecodigit/assembler.php",
         "model_viewer_param" =>
