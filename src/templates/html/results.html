@@ -35,14 +35,30 @@
                                 {% else %}
                                     {% set href = itemURI %}
                                 {% endif %}
-                                <a href="{{href}}" data-toggle="tooltip" title="{{item.title}}">
+                                <a href="{{itemURI}}" data-toggle="tooltip" title="{{item.title}}">
                                     {{item.title|length > 40 ? item.title[0:39] ~ '...' : item.title}}
-                                    {% if item.is3dModel %}
-                                        <i class="fas fa-cube"></i>
-                                    {% elseif item.isGeo %}
-                                        <i class="fas fa-globe-africa"></i>
-                                    {% endif %}
                                 </a>
+                                {% if item.is3dModel %}
+                                    {% if config.model_viewer_url %}
+                                        <a href="{{href}}"
+                                            data-toggle="tooltip"
+                                            title="Open viewer">
+                                    {% endif %}
+                                            <i class="fas fa-cube"></i>
+                                    {% if config.model_viewer_url %}
+                                        </a>
+                                    {% endif %}
+                                {% elseif item.isGeo %}
+                                    {% if config.geo_viewer_url %}
+                                        <a href="{{href}}"
+                                            data-toggle="tooltip"
+                                            title="Open viewer">
+                                    {% endif %}
+                                            <i class="fas fa-globe-africa"></i>
+                                    {% if config.geo_viewer_url %}
+                                        </a>
+                                    {% endif %}
+                                {% endif %}
                             </li>
                             {% endfor %}
                         </ul>
