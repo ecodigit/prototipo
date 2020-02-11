@@ -40,10 +40,10 @@
     // };
 
 
-// Center the maps in Rome and zooming all region
-    var mapLat = 41.9028;
-    var mapLng = 12.4964;
-    var mapDefaultZoom = 10;
+// Center the maps at the center of Lazio and zooming all region
+    var mapLat = 41.9808038;
+    var mapLng = 12.7662312;
+    var mapDefaultZoom = 8;
 
     var wktFormat = new ol.format.WKT();
 
@@ -147,7 +147,9 @@
         // interactions: [selection]
     });
 
-    view.fit(featuresExtent, {maxZoom: 15});
+    if (!ol.extent.isEmpty(featuresExtent)) {
+        view.fit(featuresExtent, {maxZoom: 15});
+    }
 
     // Add an event handler for when someone clicks on a marker
     map.on('singleclick', function(evt) {
