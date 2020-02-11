@@ -27,12 +27,13 @@
                         <ul class="list-unstyled">
                             {% for item in results[resultType] %}
                             <li>
+                                {% set itemURI = '' ~ item.item %}
                                 {% if item.is3dModel and config.model_viewer_url %}
-                                    {% set href = config.model_viewer_url ~ '?' ~ {(config.model_viewer_param|default('url')):item.item}|url_encode %}
+                                    {% set href = config.model_viewer_url ~ '?'  ~ ({(config.model_viewer_param|default('url')): itemURI}|url_encode) %}
                                 {% elseif item.isGeo and config.geo_viewer_url %}
-                                    {% set href = config.geo_viewer_url ~ '?' ~ {(config.geo_viewer_param|default('url')):item.item}|url_encode %}
+                                    {% set href = config.geo_viewer_url ~ '?' ~ {(config.geo_viewer_param|default('url')): itemURI}|url_encode %}
                                 {% else %}
-                                    {% set href = item.item %}
+                                    {% set href = itemURI %}
                                 {% endif %}
                                 <a href="{{href}}" data-toggle="tooltip" title="{{item.title}}">
                                     {{item.title|length > 40 ? item.title[0:39] ~ '...' : item.title}}
