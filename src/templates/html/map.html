@@ -88,25 +88,25 @@
     var featureSource = new ol.source.Vector({features: features});
     var featureLayer = new ol.layer.Vector({
         source: featureSource,
-        // style: new ol.style.Style({
-        //     fill: new ol.style.Fill({
-        //         color: 'rgba(255, 255, 255, 0.2)'
-        //     }),
-        //     stroke: new ol.style.Stroke({
-        //         color: '#007bff',
-        //         width: 2
-        //     }),
-        //     image: new ol.style.Circle({
-        //         radius: 7,
-        //         // fill: new ol.style.Fill({
-        //         //     color: '#ffcc33'
-        //         // }),
-        //         stroke: new ol.style.Stroke({
-        //             color: '#007bff',
-        //             width: 2
-        //         })
-        //     })
-        // })
+        style: new ol.style.Style({
+            fill: new ol.style.Fill({
+                color: '#007bff80'
+            }),
+            stroke: new ol.style.Stroke({
+                color: '#007bff',
+                width: 2
+            }),
+            image: new ol.style.Circle({
+                radius: 15,
+                // fill: new ol.style.Fill({
+                //     color: '#007bff80'
+                // }),
+                stroke: new ol.style.Stroke({
+                    color: '#007bff',
+                    width: 4
+                })
+            })
+        })
     });
 
     // var selection = new ol.interaction.Select({
