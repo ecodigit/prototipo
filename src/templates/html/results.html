@@ -7,7 +7,7 @@
     </head>
     <body>
 
-        <div class="container pt-3">
+        <div class="container-fluid pt-3">
             <div class="row">
                 <div class="col">
                     <div class="px-3">
@@ -24,7 +24,7 @@
                             {{ typeLabels[resultType] }} ({{ countByBroadType[resultType] ? countByBroadType[resultType] : 0 }})
                         </div>
                         <div class="card-body" style="padding: .5rem 1rem;">
-                        <ul>
+                        <ul class="list-unstyled">
                             {% for item in results[resultType] %}
                             <li>
                                 {% if item.is3dModel and config.model_viewer_url %}
@@ -34,7 +34,8 @@
                                 {% else %}
                                     {% set href = item.item %}
                                 {% endif %}
-                                <a href="{{href}}">{{item.title}}
+                                <a href="{{href}}" data-toggle="tooltip" title="{{item.title}}">
+                                    {{item.title|length > 40 ? item.title[0:39] ~ '...' : item.title}}
                                     {% if item.is3dModel %}
                                         <i class="fas fa-cube"></i>
                                     {% elseif item.isGeo %}

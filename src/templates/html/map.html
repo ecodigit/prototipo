@@ -48,21 +48,30 @@
     var wktFormat = new ol.format.WKT();
 
     var features = [];
+    var featuresExtent = ol.extent.createEmpty();
 
-    function add_map_point(wkt, desc, url, img) {
+    function add_map_point(wkt, shortDesc, desc, url, img) {
         var mfeature = wktFormat.readFeature(wkt);
+        var geometry = mfeature.getGeometry().transform('EPSG:4326', 'EPSG:3857');
+        ol.extent.extend(featuresExtent, geometry.getExtent());
         features.push(new ol.Feature({
+            shortDesc: shortDesc,
             desc: desc,
             url: url,
             image: img,
-            geometry: mfeature.getGeometry().transform('EPSG:4326', 'EPSG:3857'),
+            geometry: geometry,
         }));
     }
 
     {% for resultType in results|keys %}
         {% for item in results[resultType] %}
             {% if item.wktGeometry %}
-                add_map_point('{{item.wktGeometry|replace({"<http://www.opengis.net/def/crs/OGC/1.3/CRS84>": ""})|trim|raw}}', '{{item.title}}', '{{item.item}}', '{{item.imageURL}}');
+                add_map_point(
+                    '{{item.wktGeometry
+                        |replace({"<http://www.opengis.net/def/crs/OGC/1.3/CRS84>": ""})
+                        |trim|raw}}',
+                    '{{item.title|length > 20 ? item.title[0:19] ~ '...' : item.title}}', '{{item.title}}',
+                    '{{item.item}}', '{{item.imageURL}}');
             {% endif %}
         {% endfor %}
     {% endfor %}
@@ -125,18 +134,20 @@
 
     var popup = new ol.Overlay.Popup();
 
+    var view = new ol.View({
+        center: ol.proj.fromLonLat([mapLng, mapLat]),
+        zoom: mapDefaultZoom
+    });
+
     var map = new ol.Map({
         target: "map",
         layers: [tileLayer, featureLayer],
         overlays: [popup],
-        view: new ol.View({
-            center: ol.proj.fromLonLat([mapLng, mapLat]),
-            zoom: mapDefaultZoom
-        }),
+        view: view,
         // interactions: [selection]
     });
-    // }
 
+    view.fit(featuresExtent, {maxZoom: 15});
 
     // Add an event handler for when someone clicks on a marker
     map.on('singleclick', function(evt) {
@@ -147,8 +158,14 @@
 
 
         var clickedFeatures = map.getFeaturesAtPixel(evt.pixel);
-        var info = '<ul>' + clickedFeatures.map(function (feature) {
-            return '<li><a href="' + feature.get('url') + '">' + feature.get('desc') + '</a></li>'
+        var info = '<ul class="list-unstyled">' + clickedFeatures.map(function (feature) {
+            return '<li><small>' +
+                        '<a href="' + feature.get('url') + '" ' +
+                                'data-toggle="tooltip" ' +
+                                'title="' + feature.get('desc') + '">' +
+                            feature.get('shortDesc') +
+                        '</a>' +
+                    '</small></li>';
         }).join('') + '</ul>';
 
         var coord = map.getCoordinateFromPixel(evt.pixel);
@@ -156,6 +173,7 @@
         // Offset the popup so it points at the middle of the marker not the tip
         popup.setOffset([0, -22]);
         popup.show(coord, info);
+        // $('[data-toggle="tooltip"]').tooltip();
     });
 
         // console.log(popupContent.innerHTML);
@@ -189,6 +207,6 @@
             this.getTargetElement().style.cursor = '';
         }
     });
-    
+
 {% endautoescape %}
  </script>
