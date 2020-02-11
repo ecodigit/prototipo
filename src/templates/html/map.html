@@ -158,22 +158,24 @@
 
 
         var clickedFeatures = map.getFeaturesAtPixel(evt.pixel);
-        var info = '<ul class="list-unstyled">' + clickedFeatures.map(function (feature) {
-            return '<li><small>' +
-                        '<a href="' + feature.get('url') + '" ' +
-                                'data-toggle="tooltip" ' +
-                                'title="' + feature.get('desc') + '">' +
-                            feature.get('shortDesc') +
-                        '</a>' +
-                    '</small></li>';
-        }).join('') + '</ul>';
+        if (clickedFeatures) {
+            var info = '<ul class="list-unstyled">' + clickedFeatures.map(function (feature) {
+                return '<li><small>' +
+                            '<a href="' + feature.get('url') + '" ' +
+                                    'data-toggle="tooltip" ' +
+                                    'title="' + feature.get('desc') + '">' +
+                                feature.get('shortDesc') +
+                            '</a>' +
+                        '</small></li>';
+            }).join('') + '</ul>';
 
-        var coord = map.getCoordinateFromPixel(evt.pixel);
+            var coord = map.getCoordinateFromPixel(evt.pixel);
 
-        // Offset the popup so it points at the middle of the marker not the tip
-        popup.setOffset([0, -22]);
-        popup.show(coord, info);
-        // $('[data-toggle="tooltip"]').tooltip();
+            // Offset the popup so it points at the middle of the marker not the tip
+            popup.setOffset([0, -22]);
+            popup.show(coord, info);
+            // $('[data-toggle="tooltip"]').tooltip();
+        }
     });
 
         // console.log(popupContent.innerHTML);
